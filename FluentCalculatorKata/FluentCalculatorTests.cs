@@ -85,6 +85,23 @@ namespace Fluent.Calculator.Tests
             Assert.AreEqual(expected, result);
         }
 
+        [Test]
+        public void Redo_WhenCalledAfterUndo_ShouldReturnLastOperationResult()
+        {
+            //---------------Set up test pack-------------------
+            var expected = 18;
+            var calculator = CreateFluentCalculator();
+            //---------------Execute Test ----------------------
+            var result = calculator
+                .Seed(15)
+                .Plus(3)
+                .Undo()
+                .Redo()
+                .Result();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expected, result);
+        }
+
         private static FluentCalculator CreateFluentCalculator()
         {
             var calculator = new FluentCalculator();

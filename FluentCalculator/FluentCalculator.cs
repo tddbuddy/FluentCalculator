@@ -1,5 +1,4 @@
 ﻿using System;
-using FluentCalculator;
 
 namespace Fluent.Calculator
 {
@@ -7,6 +6,7 @@ namespace Fluent.Calculator
     {
         private int _runningTotal;
         private Func<int> _undo;
+        private Func<int> _redo;
 
         public IFluentOperations Seed(int startingValue)
         {
@@ -30,7 +30,14 @@ namespace Fluent.Calculator
 
         public IFluentOperations Undo()
         {
+            CreateRedoOperation();
             _runningTotal = _undo.Invoke();
+            return this;
+        }
+
+        public IFluentOperations Redo()
+        {
+            _runningTotal = _redo.Invoke();
             return this;
         }
 
@@ -43,6 +50,12 @@ namespace Fluent.Calculator
         {
             var valuePriorToOperation = _runningTotal;
             _undo = () => _runningTotal = valuePriorToOperation;
+        }
+
+        private void CreateRedoOperation()
+        {
+            var valuePriorToUndo = _runningTotal;
+            _redo = () => _runningTotal = valuePriorToUndo;
         }
     }
 }
