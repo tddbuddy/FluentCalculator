@@ -11,7 +11,7 @@ namespace Fluent.Calculator.Tests
             //---------------Set up test pack-------------------
             //---------------Execute Test ----------------------
             //---------------Test Result -----------------------
-            Assert.DoesNotThrow(() => new Fluent.Calculator.FluentCalculator());
+            Assert.DoesNotThrow(() => new FluentCalculator());
         }
 
         [Test]
@@ -100,6 +100,41 @@ namespace Fluent.Calculator.Tests
                 .Result();
             //---------------Test Result -----------------------
             Assert.AreEqual(expected, result);
+        }
+
+        [Test]
+        public void Undo_WhenCalledAfterUndo_ShouldReturnTwoOperationsBackResult()
+        {
+            //---------------Set up test pack-------------------
+            var expected = 120;
+            var calculator = CreateFluentCalculator();
+            //---------------Execute Test ----------------------
+            var result = calculator
+                .Seed(100)
+                .Plus(20)
+                .Minus(10)
+                .Plus(1)
+                .Undo()
+                .Undo()
+                .Result();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expected, result);
+        }
+
+        [Test]
+        public void Undo_WhenCalledAfterManyUndo_ShouldNotThrowException()
+        {
+            //---------------Set up test pack-------------------
+            var expected = 120;
+            var calculator = CreateFluentCalculator();
+            //---------------Execute Test ----------------------
+            //---------------Test Result -----------------------
+            Assert.DoesNotThrow(() => calculator
+                .Seed(100)
+                .Plus(20)
+                .Undo()
+                .Undo()
+                .Result());
         }
 
         private static FluentCalculator CreateFluentCalculator()

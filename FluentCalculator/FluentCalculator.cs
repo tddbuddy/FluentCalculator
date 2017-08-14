@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Fluent.Calculator
 {
     public class FluentCalculator : IFluentOperations
     {
         private int _runningTotal;
-        private Func<int> _undo;
+        private readonly Stack<Func<int>> _undoStack = new Stack<Func<int>>();
         private Func<int> _redo;
 
         public IFluentOperations Seed(int startingValue)
@@ -30,9 +31,24 @@ namespace Fluent.Calculator
 
         public IFluentOperations Undo()
         {
-            CreateRedoOperation();
-            _runningTotal = _undo.Invoke();
+            if (StackHasOperations())
+            {
+                CreateRedoOperation();
+                PerformUndoOperation();
+            }
+
             return this;
+        }
+
+        private void PerformUndoOperation()
+        {
+            var undoOperation = _undoStack.Pop();
+            _runningTotal = undoOperation.Invoke();
+        }
+
+        private bool StackHasOperations()
+        {
+            return _undoStack.Count > 0;
         }
 
         public IFluentOperations Redo()
@@ -49,7 +65,7 @@ namespace Fluent.Calculator
         private void CreateUndoOperation()
         {
             var valuePriorToOperation = _runningTotal;
-            _undo = () => _runningTotal = valuePriorToOperation;
+            _undoStack.Push(() => _runningTotal = valuePriorToOperation);
         }
 
         private void CreateRedoOperation()
