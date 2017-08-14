@@ -1,10 +1,12 @@
-﻿using FluentCalculator;
+﻿using System;
+using FluentCalculator;
 
 namespace Fluent.Calculator
 {
     public class FluentCalculator : IFluentOperations
     {
         private int _runningTotal;
+        private Func<int> _undo;
 
         public IFluentOperations Seed(int startingValue)
         {
@@ -14,25 +16,33 @@ namespace Fluent.Calculator
 
         public IFluentOperations Minus(int value)
         {
+            CreateUndoOperation();
             _runningTotal -= value;
             return this;
         }
 
         public IFluentOperations Plus(int value)
         {
+            CreateUndoOperation();
             _runningTotal += value;
             return this;
         }
 
         public IFluentOperations Undo()
         {
-
+            _runningTotal = _undo.Invoke();
             return this;
         }
 
         public int Result()
         {
             return _runningTotal;
+        }
+
+        private void CreateUndoOperation()
+        {
+            var valuePriorToOperation = _runningTotal;
+            _undo = () => _runningTotal = valuePriorToOperation;
         }
     }
 }

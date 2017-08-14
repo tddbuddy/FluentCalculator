@@ -85,9 +85,9 @@ namespace Fluent.Calculator.Tests
             Assert.AreEqual(expected, result);
         }
 
-        private static Fluent.Calculator.FluentCalculator CreateFluentCalculator()
+        private static FluentCalculator CreateFluentCalculator()
         {
-            var calculator = new Fluent.Calculator.FluentCalculator();
+            var calculator = new FluentCalculator();
             return calculator;
         }
     }
