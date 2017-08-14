@@ -125,7 +125,6 @@ namespace Fluent.Calculator.Tests
         public void Undo_WhenCalledAfterManyUndo_ShouldNotThrowException()
         {
             //---------------Set up test pack-------------------
-            var expected = 120;
             var calculator = CreateFluentCalculator();
             //---------------Execute Test ----------------------
             //---------------Test Result -----------------------

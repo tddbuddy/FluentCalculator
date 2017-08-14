@@ -18,14 +18,14 @@ namespace Fluent.Calculator
         public IFluentOperations Minus(int value)
         {
             CreateUndoOperation();
-            _runningTotal -= value;
+            PerformMinusOperation(value);
             return this;
         }
 
         public IFluentOperations Plus(int value)
         {
             CreateUndoOperation();
-            _runningTotal += value;
+            PerformPlusOperation(value);
             return this;
         }
 
@@ -40,17 +40,6 @@ namespace Fluent.Calculator
             return this;
         }
 
-        private void PerformUndoOperation()
-        {
-            var undoOperation = _undoStack.Pop();
-            _runningTotal = undoOperation.Invoke();
-        }
-
-        private bool StackHasOperations()
-        {
-            return _undoStack.Count > 0;
-        }
-
         public IFluentOperations Redo()
         {
             _runningTotal = _redo.Invoke();
@@ -60,6 +49,27 @@ namespace Fluent.Calculator
         public int Result()
         {
             return _runningTotal;
+        }
+
+        private void PerformPlusOperation(int value)
+        {
+            _runningTotal += value;
+        }
+
+        private void PerformMinusOperation(int value)
+        {
+            _runningTotal -= value;
+        }
+
+        private void PerformUndoOperation()
+        {
+            var undoOperation = _undoStack.Pop();
+            _runningTotal = undoOperation.Invoke();
+        }
+
+        private bool StackHasOperations()
+        {
+            return _undoStack.Count > 0;
         }
 
         private void CreateUndoOperation()

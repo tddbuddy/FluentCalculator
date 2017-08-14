@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26228.9
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fluent.Calculator.Tests", "Fluent.Calculator.Tests.csproj", "{116C2EC2-5A99-4D1D-8434-686ACBC81FF3}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fluent.Calculator.Tests", "Fluent.Calculator.Tests\Fluent.Calculator.Tests.csproj", "{116C2EC2-5A99-4D1D-8434-686ACBC81FF3}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fluent.Calculator", "..\FluentCalculator\Fluent.Calculator.csproj", "{F93AC7C9-AA85-4B6A-B6A3-806D8EA7D8BC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Fluent.Calculator", "Fluent.Calculator\Fluent.Calculator.csproj", "{F93AC7C9-AA85-4B6A-B6A3-806D8EA7D8BC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

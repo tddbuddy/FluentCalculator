@@ -50,7 +50,7 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\FluentCalculator\Fluent.Calculator.csproj">
+    <ProjectReference Include="..\Fluent.Calculator\Fluent.Calculator.csproj">
       <Project>{f93ac7c9-aa85-4b6a-b6a3-806d8ea7d8bc}</Project>
       <Name>Fluent.Calculator</Name>
     </ProjectReference>
