@@ -136,6 +136,68 @@ namespace Fluent.Calculator.Tests
                 .Result());
         }
 
+        [Test]
+        public void Redo_WhenCalledTimesAfterUndoWithOperationBetween_ShouldReturnLastOperationResult()
+        {
+            //---------------Set up test pack-------------------
+            var expected = 116;
+            var calculator = CreateFluentCalculator();
+            //---------------Execute Test ----------------------
+            var result = calculator
+                .Seed(100)
+                .Plus(20)
+                .Minus(10)
+                .Plus(1)
+                .Undo()
+                .Redo()
+                .Plus(5)
+                .Undo()
+                .Redo()
+                .Result();
+            //---------------Test Result -----------------------
+            Assert.AreEqual(expected, result);
+        }
+
+        [Test]
+        public void Redo_WhenCalledManyTimesAfterUndo_ShouldNotThrowException()
+        {
+            // ---------------Set up test pack------------------ -
+            var calculator = CreateFluentCalculator();
+            //---------------Execute Test----------------------
+            //-------------- - Test Result---------------------- -
+              Assert.DoesNotThrow(() => calculator
+                  .Seed(100)
+                  .Plus(20)
+                  .Undo()
+                  .Redo()
+                  .Redo()
+                  .Result());
+        }
+
+        //todo: when two stacked redo with single undo?
+
+        //[Test]
+        //public void Redo_WhenCalledAfterOperation_ShouldReturnLastOperationResult()
+        //{
+        //    //---------------Set up test pack-------------------
+        //    var expected = 144;
+        //    var calculator = CreateFluentCalculator();
+        //    //---------------Execute Test ----------------------
+        //    var result = calculator
+        //        .Seed(100)
+        //        .Plus(25)
+        //        .Plus(19)
+        //        .Plus(1)
+        //        .Undo()
+        //        .Undo()
+        //        .Redo()
+        //        .Plus(5)
+        //        .Redo()
+        //        .Result();
+        //    //---------------Test Result -----------------------
+        //    Assert.AreEqual(expected, result);
+        //}
+
         private static FluentCalculator CreateFluentCalculator()
         {
             var calculator = new FluentCalculator();

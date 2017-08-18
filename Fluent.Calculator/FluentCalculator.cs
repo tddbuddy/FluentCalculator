@@ -6,8 +6,8 @@ namespace Fluent.Calculator
     public class FluentCalculator : IFluentOperations
     {
         private int _runningTotal;
-        private readonly Stack<Func<int>> _undoStack = new Stack<Func<int>>();
-        private Func<int> _redo;
+        private readonly Stack<Func<int>> _undoOperations = new Stack<Func<int>>();
+        private readonly Stack<Func<int>> _redoOperations = new Stack<Func<int>>();
 
         public IFluentOperations Seed(int startingValue)
         {
@@ -31,7 +31,7 @@ namespace Fluent.Calculator
 
         public IFluentOperations Undo()
         {
-            if (StackHasOperations())
+            if (HasUndoOperation())
             {
                 CreateRedoOperation();
                 PerformUndoOperation();
@@ -42,13 +42,27 @@ namespace Fluent.Calculator
 
         public IFluentOperations Redo()
         {
-            _runningTotal = _redo.Invoke();
+            if (HasRedoOperation())
+            {
+                PerformRedoOperation();
+            }
             return this;
         }
 
         public int Result()
         {
             return _runningTotal;
+        }
+
+        private void PerformRedoOperation()
+        {
+            var redoOperation = _redoOperations.Pop();
+            _runningTotal = redoOperation.Invoke();
+        }
+
+        private bool HasRedoOperation()
+        {
+            return _redoOperations.Count > 0;
         }
 
         private void PerformPlusOperation(int value)
@@ -63,25 +77,25 @@ namespace Fluent.Calculator
 
         private void PerformUndoOperation()
         {
-            var undoOperation = _undoStack.Pop();
+            var undoOperation = _undoOperations.Pop();
             _runningTotal = undoOperation.Invoke();
         }
 
-        private bool StackHasOperations()
+        private bool HasUndoOperation()
         {
-            return _undoStack.Count > 0;
+            return _undoOperations.Count > 0;
         }
 
         private void CreateUndoOperation()
         {
             var valuePriorToOperation = _runningTotal;
-            _undoStack.Push(() => _runningTotal = valuePriorToOperation);
+            _undoOperations.Push(() => _runningTotal = valuePriorToOperation);
         }
 
         private void CreateRedoOperation()
         {
             var valuePriorToUndo = _runningTotal;
-            _redo = () => _runningTotal = valuePriorToUndo;
+            _redoOperations.Push(()=> _runningTotal = valuePriorToUndo);
         }
     }
 }
