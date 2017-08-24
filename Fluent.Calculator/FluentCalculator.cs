@@ -54,6 +54,11 @@ namespace Fluent.Calculator
             return _runningTotal;
         }
 
+        private void PurgeRedoStack()
+        {
+            _redoOperations.Clear();
+        }
+
         private void PerformRedoOperation()
         {
             var redoOperation = _redoOperations.Pop();
@@ -88,6 +93,7 @@ namespace Fluent.Calculator
 
         private void CreateUndoOperation()
         {
+            PurgeRedoStack();
             var valuePriorToOperation = _runningTotal;
             _undoOperations.Push(() => _runningTotal = valuePriorToOperation);
         }
